@@ -13,13 +13,34 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB conectado'))
   .catch((error) => console.error('Error al conectar a MongoDB:', error));
 
-
+/*
 // Middleware
 app.use(cors({
   origin: 'http://localhost:5173', // Permitir solicitudes desde tu frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
   allowedHeaders: ['Content-Type'], // Headers permitidos
 }));
+
+*/
+
+const allowedOrigins = [
+  'http://localhost:5173', // Desarrollo local
+  'https://notificacionesfrontend.onrender.com' // Tu frontend en Render
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+      } else {
+          callback(new Error('Not allowed by CORS'));
+      }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  credentials: true // Permitir cookies si las usas
+}));
+
+
 app.use(bodyParser.json());
 
 // Configuración de VAPID
