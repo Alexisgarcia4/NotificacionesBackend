@@ -15,7 +15,11 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Permitir solicitudes desde tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+  allowedHeaders: ['Content-Type'], // Headers permitidos
+}));
 app.use(bodyParser.json());
 
 // Configuración de VAPID
