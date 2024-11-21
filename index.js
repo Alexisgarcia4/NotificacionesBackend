@@ -37,6 +37,7 @@ app.use(cors({
       }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeceras permitidas
   credentials: true // Permitir cookies si las usas
 }));
 
