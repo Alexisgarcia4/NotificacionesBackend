@@ -33,15 +33,49 @@ router.post('/subscribe', async (req, res) => {
   }
 });
 
+// // Enviar notificaciones
+// router.post('/notify', async (req, res) => {
+//   const { message } = req.body;
+
+//   try {
+//     const subscriptions = await Subscription.find();
+
+//     subscriptions.forEach((sub) => {
+//       const payload = JSON.stringify({ title: 'Notificación', body: message });
+
+//       webPush.sendNotification(
+//         {
+//           endpoint: sub.endpoint,
+//           keys: { p256dh: sub.p256dh, auth: sub.auth },
+//         },
+//         payload
+//       ).catch(console.error);
+//     });
+
+//     res.status(200).json({ message: 'Notificaciones enviadas' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Error al enviar las notificaciones' });
+//   }
+// });
+
 // Enviar notificaciones
 router.post('/notify', async (req, res) => {
-  const { message } = req.body;
+  const { title, message, link } = req.body;
+
+  if (!title || !message || !link) {
+    return res.status(400).json({ message: 'Faltan datos: title, message o link' });
+  }
 
   try {
     const subscriptions = await Subscription.find();
 
     subscriptions.forEach((sub) => {
-      const payload = JSON.stringify({ title: 'Notificación', body: message });
+      const payload = JSON.stringify({ 
+        title, 
+        body: message, 
+        link 
+      });
 
       webPush.sendNotification(
         {
