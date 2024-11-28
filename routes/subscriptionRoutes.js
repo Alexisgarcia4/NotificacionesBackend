@@ -74,7 +74,7 @@ router.post('/notify', async (req, res) => {
       const payload = JSON.stringify({ 
         title, 
         body: message, 
-        link 
+        data: { link }, // El enlace se pasa en el campo "data"
       });
 
       webPush.sendNotification(
